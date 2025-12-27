@@ -1,0 +1,24 @@
+# --- Secrets ---
+.env
+
+# --- Virtual Environment ---
+.venv/
+venv/
+env/
+
+# --- Database (generated at runtime) ---
+*.db
+
+# --- Python Cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# --- macOS ---
+.DS_Store
+
+# --- IDE ---
+.vscode/
+.idea/

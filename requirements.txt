@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+python-dotenv
+
+# ─── Core AI SDK (always required) ────────────────────────────────────────────
+google-genai        # Gemini (default provider)
+
+# ─── Optional: install the SDK for your chosen alternative provider ────────────
+# openai            # OpenAI (GPT-4o, GPT-4o-mini)
+# anthropic         # Anthropic (Claude 3.5 Haiku, Sonnet)
+# groq              # Groq (Llama 3, Mixtral — very fast, free tier available)
+# ollama            # Ollama (fully local, no API key, requires https://ollama.com)
