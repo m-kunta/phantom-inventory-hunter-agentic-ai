@@ -277,7 +277,12 @@ google-genai        # Gemini AI — default provider
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for full text.
+
+**What this means:**
+- ✅ Free to use for personal, academic, or commercial projects
+- ✅ Free to modify and distribute
+- ⚠️ You **must** keep the copyright notice (i.e., credit Mohith Kunta) in any copy or derivative work
 
 ---
 
