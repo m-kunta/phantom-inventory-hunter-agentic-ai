@@ -200,6 +200,18 @@ if not df.empty:
         st.sidebar.info("ℹ️ Ollama runs locally — no API key needed")
 
     st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        """
+        <div style='text-align: center; color: #888; font-size: 0.8rem; padding: 0.5rem 0;'>
+            Built by <strong>Mohith Kunta</strong><br>
+            <a href='https://github.com/m-kunta' target='_blank'
+               style='color: #a78bfa; text-decoration: none;'>
+               🔗 github.com/m-kunta
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # ── Data Filtering ────────────────────────────────────────────────────────
     if selected_category != "All":
@@ -278,3 +290,24 @@ if not df.empty:
         st.success("🎉 No Phantom Inventory detected with the current sensitivity threshold!")
 else:
     st.warning("⚠️ No data loaded. Please run `python data_gen.py` to generate the synthetic SQLite database.")
+
+# ────────────────────────────────────────────────────────────────────────────── FOOTER
+st.markdown("""
+<div style='
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border-top: 1px solid #333;
+    color: #888;
+    font-size: 0.85rem;
+    line-height: 1.8;
+'>
+    👻 <strong>Phantom Inventory Hunter</strong> &nbsp;|&nbsp; Agentic AI Supply Chain Tool<br>
+    Built by <strong>Mohith Kunta</strong> &nbsp;&mdash;&nbsp;
+    <a href='https://github.com/m-kunta' target='_blank'
+       style='color: #a78bfa; text-decoration: none;'>
+        github.com/m-kunta
+    </a>
+    &nbsp;|&nbsp; MIT License
+</div>
+""", unsafe_allow_html=True)
