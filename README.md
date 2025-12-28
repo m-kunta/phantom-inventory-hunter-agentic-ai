@@ -264,7 +264,24 @@ google-genai        # Gemini AI — default provider
 
 ---
 
-## 💡 Potential Enhancements
+## 💡 Roadmap
+
+### 🔬 Planned: Root Cause AI Agent
+> **Full spec:** [ROOT_CAUSE_AGENT.md](ROOT_CAUSE_AGENT.md)
+
+The next major module — moves beyond *detecting* phantom inventory to *diagnosing why* it's happening using relational data signals and a heuristic triangulation engine before the LLM call.
+
+| Signal | Diagnostic Flag | Meaning |
+|---|---|---|
+| Sister-SKU sales spike +20% | `SHELF_VOID` | Item missing from shelf, customers substituting |
+| Category velocity < 20% baseline | `OPERATIONAL_BLOCKAGE` | Aisle closed / maintenance / reset |
+| Shrink score > 0.75 + zero sales | `SHRINK_RISK` | Theft or inventory inaccuracy |
+
+New fields required: `sister_sku_id`, `category_velocity_index`, `historical_shrink_score`, `location_status`
+
+---
+
+### 🗃️ Other Future Enhancements
 
 - [ ] **Real data connectors** (SAP, NetSuite, Shopify API)
 - [ ] **Email/Slack alerts** for newly flagged High-risk SKUs
