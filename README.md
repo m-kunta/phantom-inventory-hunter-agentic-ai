@@ -18,7 +18,7 @@
 
 **Phantom Inventory Hunter** is a prototype data science application designed to identify retail "ghost inventory"—items that the system believes are in stock, but are not selling at expected probabilistic frequencies.
 
-![Dashboard Preview](/Users/MKunta/.gemini/antigravity/brain/8e627a15-1074-4cff-9f50-1ebdc4b7cf81/phantom_dashboard_1772332720080.png)
+![Dashboard Preview](assets/phantom_dashboard.png)
 
 This tool bridges the gap between raw statistical anomalies and actionable retail operations by leveraging **Agentic AI** to analyze flagged SKUs and generate prioritized store audit briefings.
 
@@ -53,7 +53,7 @@ This tool detects potential phantom inventory by flagging SKUs that:
 
 Clicking **"Generate Store Audit Briefing"** passes the anomaly context to an LLM provider of your choice. The LLM acts as a Virtual Supply Chain Analyst, generating a concise, readable brief for store associates explaining *why* the item is flagged and *where* they should look for it (e.g., specific backroom areas, top-stock, damaged bins).
 
-![AI Detective Preview](/Users/MKunta/.gemini/antigravity/brain/8e627a15-1074-4cff-9f50-1ebdc4b7cf81/phantom_ai_detective_1772332708684.png)
+![AI Detective Preview](assets/phantom_ai_detective.png)
 
 **Provider Support:** The app includes a flexible factory class (`LLMProvider`) that currently supports:
 
