@@ -162,6 +162,7 @@ Your browser will automatically open to **http://localhost:8501** with the live 
 
 | Control | What it does |
 |---|---|
+| **Data Source (CSV Upload)** | Upload your own real inventory data instead of using synthetic data |
 | **Category Filter** | Show only Health & Beauty or Grocery SKUs |
 | **Anomaly Threshold Multiplier** | Lower = more flags; Higher = stricter (fewer flags) |
 | **AI Provider** | Switch between Gemini, OpenAI, Groq, Anthropic, or Ollama |
