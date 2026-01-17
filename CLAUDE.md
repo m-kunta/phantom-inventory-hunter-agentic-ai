@@ -33,7 +33,12 @@ pip install groq          # Groq
 pip install ollama        # Ollama (also requires the desktop app from ollama.com)
 ```
 
-There are no tests yet. The spec (`ROOT_CAUSE_AGENT.md`) calls for unit tests on each triangulation heuristic as the final implementation step.
+**Run tests:**
+```bash
+pytest tests/ -v
+# Run a single test file:
+pytest tests/test_root_cause_agent.py -v
+```
 
 ---
 
@@ -46,7 +51,7 @@ There are no tests yet. The spec (`ROOT_CAUSE_AGENT.md`) calls for unit tests on
 | `app.py` | Streamlit entry point. Owns the UI, ghost detection algorithm, risk classification, and the `generate_store_audit_briefing()` agentic call. |
 | `llm_providers.py` | Provider factory. Single public function `get_llm_response(prompt, provider, model)`. All provider SDKs are lazy-imported inside their private `_call_*()` handler — never at module level. |
 | `data_gen.py` | Synthetic data engine. Generates 50 SKUs to SQLite. |
-| `root_cause_agent.py` | **Does not exist yet.** Planned triangulation engine (see `ROOT_CAUSE_AGENT.md`). |
+| `root_cause_agent.py` | Triangulation Engine. `run_triangulation()` classifies phantom root cause (SHELF_VOID / OPERATIONAL_BLOCKAGE / SHRINK_RISK / NORMAL). `build_diagnostic_payload()` structures the result for the LLM. `generate_root_cause_briefing()` orchestrates the full pipeline. |
 
 ### Data flow
 
@@ -101,4 +106,4 @@ That is the complete change — no modifications to `app.py` needed; it reads `P
 
 ### Environment / secrets
 
-Copy `.env.example` → `.env`. Only `LLM_PROVIDER` and the key for your chosen provider are required. `app.py` reads `LLM_PROVIDER` at startup to set the sidebar default; the key status indicator reads the relevant `*_API_KEY` variable live.
+Copy `.env.example` → `.env`. Only `LLM_PROVIDER` and the key for your chosen provider are required. `app.py` reads `LLM_PROVIDER` at startup to set the sidebar default; the key status indicator reads the relevant `*_API_KEY` variable live (and allows the user to input/update the key directly from the UI, which persists it to `.env`).

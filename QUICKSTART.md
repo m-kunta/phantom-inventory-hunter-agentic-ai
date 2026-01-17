@@ -129,6 +129,8 @@ Ollama runs the AI model **on your computer** — no internet needed after setup
    ```
 5. Save the file
 
+> 💡 **Tip:** You can also securely enter your API key directly in the Streamlit app sidebar under the **🤖 AI Provider** section. The app will automatically save it to your `.env` file for you!
+
 > ⚠️ **Never share your `.env` file or post your API key publicly.** It's already excluded from GitHub by `.gitignore`.
 
 ---

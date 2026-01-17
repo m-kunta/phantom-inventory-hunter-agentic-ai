@@ -139,7 +139,7 @@ The app features a **provider-agnostic AI layer** (`llm_providers.py`) built on 
 
 ### How Switching Works
 
-1. **Sidebar** — Select any provider from the dropdown in the running app. Change models by editing the model text box.
+1. **Sidebar** — Select any provider from the dropdown in the running app. Change models by editing the model text box. You can securely enter your API key directly in the sidebar, or update an existing one.
 2. **`.env`** — Set `LLM_PROVIDER=Groq` (or any name) to make a provider the persistent default.
 3. **Missing packages** — If a provider's SDK isn't installed, the app shows a friendly install hint instead of crashing.
 
@@ -314,8 +314,8 @@ Moves beyond *detecting* phantom inventory to *diagnosing why* it's happening us
 **Implementation progress:**
 - [x] Extend `data_gen.py` with 4 diagnostic schema fields
 - [x] Create `root_cause_agent.py` — Triangulation Engine
-- [ ] Update `llm_providers.py` for structured diagnostic payloads
-- [ ] Update `app.py` with diagnostic badges and Investigation Panel
+- [x] Update `llm_providers.py` for structured diagnostic payloads
+- [x] Update `app.py` with diagnostic badges and Investigation Panel
 
 ---
 
