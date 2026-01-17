@@ -1,6 +1,6 @@
 # 🔬 Feature Specification: Root Cause AI Agent
 
-> **Status:** 🚧 In Progress — Data Layer Complete
+> **Status:** 🚧 In Progress — Logic & Testing Complete
 > **Module:** `root_cause_agent.py` (to be added to `llm_providers.py` agentic layer)  
 > **Author:** Mohith Kunta · [github.com/m-kunta](https://github.com/m-kunta)
 
@@ -124,11 +124,11 @@ $$\text{LSO} = \text{Avg Daily Sales} \times \text{Unit Margin} \times \text{Day
 ## 7. Implementation Checklist
 
 - [x] Extend `data_gen.py` with 4 new schema fields (`Sister_SKU_ID`, `Category_Velocity_Index`, `Historical_Shrink_Score`, `Location_Status`)
-- [ ] Create `root_cause_agent.py` with the Triangulation Engine (substitution, blockage, shrink logic)
+- [x] Create `root_cause_agent.py` with the Triangulation Engine (substitution, blockage, shrink logic)
 - [ ] Update `llm_providers.py` to accept structured diagnostic payloads
 - [ ] Update `app.py` with diagnostic badge column and Investigation Panel
 - [x] Update `README.md` and `QUICKSTART.md` for new setup requirements
-- [ ] Write unit tests for each triangulation heuristic
+- [x] Write unit tests for each triangulation heuristic
 
 ---
 
