@@ -146,6 +146,20 @@ st.markdown(
     "misplaced, or damaged."
 )
 
+with st.expander("📖 What is this project and how do I use it?", expanded=False):
+    st.markdown(
+        """
+        ### About the Project
+        **Phantom Inventory Hunter** is an AI-powered Supply Chain prototype that bridges the gap between statistical anomalies and actionable retail operations. It detects items that have stopped selling unexpectedly and uses Agentic AI to diagnose the root cause and generate a Store Audit Briefing for employees.
+        
+        ### How to test out the capabilities:
+        1. **Load Data:** The app starts with 50 synthetic SKUs. You can upload your own custom data via the **Data Source** sidebar or re-generate a new set of synthetic items at any time.
+        2. **Tune the Sensitivity:** Use the **Anomaly Threshold Multiplier** in the sidebar. Lowering it catches more items (stricter); raising it catches fewer items.
+        3. **Find the Ghosts:** Look at the **Inventory Monitoring Table** for items flagged as `High` or `Medium` risk.
+        4. **Generate AI Briefings:** Scroll down to the **Virtual Supply Chain Analyst**. Select any flagged SKU from the dropdown and click *Generate Store Audit Briefing*. The AI will explain why the item was flagged and suggest where store associates should look for it.
+        """
+    )
+    
 # [Feature Addition #1] CSV Data Upload (Added: 2026-03-03)
 # ── Data Source Sidebar ───────────────────────────────────────────────────
 st.sidebar.header("📁 Data Source")
