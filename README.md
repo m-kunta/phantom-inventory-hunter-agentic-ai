@@ -45,6 +45,7 @@ This tool detects potential phantom inventory by flagging SKUs that:
 | 🎛️ **Adjustable Sensitivity** | A sidebar slider lets you tune the N-multiplier threshold interactively |
 | 📊 **Risk Tiering** | Automatically classifies flagged items as **High** / **Medium** / **Low** risk |
 | 🧠 **AI Store Audit Briefings** | Powered by Google Gemini — click any flagged SKU for a plain-English root-cause analysis |
+| 📁 **Custom Data Upload** | Upload your own custom inventory data via CSV in the sidebar |
 | 🗂️ **Category Filtering** | Filter by `Health & Beauty` or `Grocery` in the sidebar |
 | 💾 **SQLite Persistence** | All data stored locally in a lightweight SQLite database |
 | ⚡ **Streamlit Dashboard** | Interactive, real-time, filterable UI with color-coded risk levels |
@@ -221,11 +222,13 @@ cp .env.example .env
 ```
 Get a free API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 
-**5. Generate synthetic data:**
+**5. Generate synthetic data (or use your own):**
 ```bash
 python data_gen.py
 ```
 > **Tip:** Data is seeded (default `seed=42`) so the same dataset is generated on every run. Pass a different seed to get a new dataset: `python -c "from data_gen import generate_synthetic_data; generate_synthetic_data(seed=99)"`
+> 
+> **Have your own data?** You can skip generation and upload your own `.csv` file directly in the app sidebar! Required columns: `SKU_ID`, `Product_Name`, `Category`, `On_Hand_Qty`, `Daily_Sales_Units`, `Last_Sale_Date`.
 
 **6. Launch the dashboard:**
 ```bash

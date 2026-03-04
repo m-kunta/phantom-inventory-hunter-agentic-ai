@@ -67,7 +67,8 @@ def generate_synthetic_data(db_path='phantom_inventory.db', seed: int = 42):
         
         if is_phantom_candidate and on_hand > 0:
             # Force anomalous recency (Phantom Inventory!)
-            days_since_last_sale = random.randint(int(expected_frequency * 4), 30)
+            min_days = int(expected_frequency * 4)
+            days_since_last_sale = random.randint(min_days, max(30, min_days + 15))
         else:
             # Normal recency
             days_since_last_sale = random.randint(0, int(expected_frequency * 2) + 1)

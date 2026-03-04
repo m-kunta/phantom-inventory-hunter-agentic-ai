@@ -1,0 +1,7 @@
+SKU_ID,Product_Name,Category,On_Hand_Qty,Daily_Sales_Units,Last_Sale_Date
+SAMPLE_001,Premium Shampoo,Health & Beauty,45,2.5,2026-03-01
+SAMPLE_002,Organic Apples,Grocery,120,5.0,2026-03-03
+SAMPLE_003,Face Wash,Health & Beauty,0,1.2,2026-02-15
+SAMPLE_004,Cereal Box,Grocery,85,3.0,2026-02-28
+SAMPLE_005,Ghost Item 1,Grocery,50,4.0,2026-01-10
+SAMPLE_006,Ghost Item 2,Health & Beauty,35,1.5,2026-01-20

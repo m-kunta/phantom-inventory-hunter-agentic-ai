@@ -21,9 +21,11 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from llm_providers import get_llm_response, PROVIDER_DEFAULTS
+import random
+from data_gen import generate_synthetic_data
 
 # Load environment variables from .env file (never commit .env to git!)
-load_dotenv()
+load_dotenv(override=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CONFIGURATION & SETUP
@@ -143,6 +145,74 @@ st.markdown(
     "selling at expected frequencies. This suggests they may be lost in the backroom, "
     "misplaced, or damaged."
 )
+
+# [Feature Addition #1] CSV Data Upload (Added: 2026-03-03)
+# ── Data Source Sidebar ───────────────────────────────────────────────────
+st.sidebar.header("📁 Data Source")
+
+# [Feature Addition #3] Sample CSV Download (Added: 2026-03-03)
+sample_csv = "SKU_ID,Product_Name,Category,On_Hand_Qty,Daily_Sales_Units,Last_Sale_Date\nSKU999,Sample Item,Grocery,50,2.5,2026-01-01"
+st.sidebar.download_button(
+    label="Download Sample CSV Template",
+    data=sample_csv,
+    file_name="sample_inventory_template.csv",
+    mime="text/csv",
+)
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload Inventory Data (CSV)", 
+    type=["csv"],
+    help="Required columns: SKU_ID, Product_Name, Category, On_Hand_Qty, Daily_Sales_Units, Last_Sale_Date"
+)
+
+if uploaded_file is not None:
+    # We only process the uploaded file if:
+    # 1. We haven't processed this exact file yet
+    # 2. OR the user hasn't explicitly overridden it by requesting synthetic data
+    
+    # Check if a new file was uploaded compared to our last memory
+    is_new_upload = ("last_uploaded_file" not in st.session_state) or (st.session_state.last_uploaded_file != uploaded_file.name)
+    
+    if is_new_upload:
+        # A new file was dropped in, clear any synthetic override flags
+        st.session_state.pop("synthetic_override", None)
+        
+    if not st.session_state.get("synthetic_override", False) and is_new_upload:
+        try:
+            uploaded_df = pd.read_csv(uploaded_file)
+            required_cols = {'SKU_ID', 'Product_Name', 'Category', 'On_Hand_Qty', 'Daily_Sales_Units', 'Last_Sale_Date'}
+            
+            if not required_cols.issubset(uploaded_df.columns):
+                st.sidebar.error(f"Missing required columns. Uploaded columns: {list(uploaded_df.columns)}. Required: {list(required_cols)}")
+            else:
+                with sqlite3.connect("phantom_inventory.db") as conn:
+                    uploaded_df.to_sql('inventory', conn, if_exists='replace', index=False)
+                
+                # Mark this file as processed in session state
+                st.session_state.last_uploaded_file = uploaded_file.name
+                st.sidebar.success("Successfully loaded CSV data! Refreshing...")
+                load_data.clear() # Clear the cache so it reloads from DB
+                st.rerun()
+        except Exception as e:
+            st.sidebar.error(f"Error parsing CSV file: {e}")
+
+st.sidebar.markdown("---")
+
+# [Feature Addition #2] Generate Synthetic Data (Added: 2026-03-03)
+st.sidebar.subheader("🎲 Synthetic Data")
+if st.sidebar.button("Generate New Synthetic Data", help="Overwrites the SQLite database with 50 new random SKUs"):
+    if uploaded_file is not None:
+        st.sidebar.warning("⚠️ Please remove the uploaded CSV file (click the 'X') before generating synthetic data.")
+    else:
+        new_seed = random.randint(1, 100000)
+        with st.spinner("Generating new data..."):
+            generate_synthetic_data(seed=new_seed)
+            st.session_state["synthetic_override"] = True  # Flag to ignore the CSV currently in the uploader
+            st.session_state.pop("last_uploaded_file", None) # Force clearing last upload state
+            load_data.clear() # Clear DB cache
+            st.rerun()
+
+st.sidebar.markdown("---")
 
 df = load_data()
 
