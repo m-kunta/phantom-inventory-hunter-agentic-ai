@@ -146,6 +146,8 @@ You should see:
 💾 Saved to phantom_inventory.db
 ```
 
+This creates 50 synthetic SKUs across Health & Beauty and Grocery, including the diagnostic fields needed for Root Cause analysis (`Sister_SKU_ID`, `Category_Velocity_Index`, `Historical_Shrink_Score`, `Location_Status`).
+
 ---
 
 ## Step 7 — Launch the Dashboard
@@ -162,7 +164,7 @@ Your browser will automatically open to **http://localhost:8501** with the live 
 
 | Control | What it does |
 |---|---|
-| **Data Source (CSV Upload)** | Upload your own real inventory data instead of using synthetic data |
+| **Data Source (CSV Upload)** | Upload your own real inventory data instead of using synthetic data. Core columns required: `SKU_ID`, `Product_Name`, `Category`, `On_Hand_Qty`, `Daily_Sales_Units`, `Last_Sale_Date`. Add `Sister_SKU_ID`, `Category_Velocity_Index`, `Historical_Shrink_Score`, `Location_Status` to enable Root Cause diagnostics. |
 | **Category Filter** | Show only Health & Beauty or Grocery SKUs |
 | **Anomaly Threshold Multiplier** | Lower = more flags; Higher = stricter (fewer flags) |
 | **AI Provider** | Switch between Gemini, OpenAI, Groq, Anthropic, or Ollama |
