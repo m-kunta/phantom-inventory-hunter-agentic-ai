@@ -68,7 +68,7 @@ phantom_inventory/
 ├── app.py                   # Main Streamlit dashboard & AI interface
 ├── llm_providers.py         # Provider factory (Gemini/OpenAI/Anthropic/Groq/Ollama)
 ├── data_gen.py              # Synthetic data engine (SQLite generator)
-├── root_cause_agent.py      # Triangulation engine — Root Cause AI Agent (in progress)
+├── root_cause_agent.py      # Triangulation engine — Root Cause AI Agent (Logic Complete)
 ├── phantom_inventory.db     # Auto-generated SQLite database (git-ignored)
 ├── requirements.txt         # Python dependencies
 ├── .env                     # Your secret API keys (git-ignored, never commit!)
@@ -300,7 +300,7 @@ google-genai        # Gemini AI — default provider
 
 ## 💡 Roadmap
 
-### 🔬 In Progress: Root Cause AI Agent
+### 🔬 Root Cause AI Agent (Logic Complete)
 > **Full spec:** [ROOT_CAUSE_AGENT.md](ROOT_CAUSE_AGENT.md)
 
 Moves beyond *detecting* phantom inventory to *diagnosing why* it's happening using relational data signals and a heuristic triangulation engine before the LLM call.
@@ -313,7 +313,7 @@ Moves beyond *detecting* phantom inventory to *diagnosing why* it's happening us
 
 **Implementation progress:**
 - [x] Extend `data_gen.py` with 4 diagnostic schema fields
-- [ ] Create `root_cause_agent.py` — Triangulation Engine
+- [x] Create `root_cause_agent.py` — Triangulation Engine
 - [ ] Update `llm_providers.py` for structured diagnostic payloads
 - [ ] Update `app.py` with diagnostic badges and Investigation Panel
 
