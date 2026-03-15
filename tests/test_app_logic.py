@@ -4,14 +4,12 @@ Tests for pure logic functions extracted from app.py:
   determine_risk()               — phantom severity classification
   color_risk_levels()            — CSS colour string generation
   load_data()                    — SQLite loading + derived-column computation
-  generate_store_audit_briefing()— prompt construction + LLM delegation
 """
 import sqlite3
 
 import pandas as pd
 import pytest
 from datetime import datetime, timedelta
-from unittest.mock import patch
 
 # conftest.py has already injected the streamlit mock into sys.modules before
 # this file is collected, so `import app` is safe here.
@@ -157,69 +155,29 @@ class TestLoadData:
         df = app.load_data(self._write_db(tmp_path, rows))
         assert len(df) == 5
 
-
 # ─────────────────────────────────────────────────────────────────────────────
-# generate_store_audit_briefing
+# color_diagnostic_flag
 # ─────────────────────────────────────────────────────────────────────────────
-class TestGenerateStoreAuditBriefing:
-    """Verify prompt construction and correct delegation to get_llm_response."""
+class TestColorDiagnosticFlag:
+    def test_shelf_void_returns_yellow_styling(self):
+        result = app.color_diagnostic_flag("SHELF_VOID")
+        assert "background-color: #ffd166;" in result
+        assert "color: #000;" in result
 
-    def _sku(self) -> pd.Series:
-        return pd.Series(
-            {
-                "SKU_ID": "SKU042",
-                "Product_Name": "Test Widget",
-                "Category": "Grocery",
-                "On_Hand_Qty": 15,
-                "Daily_Sales_Units": 2.5,
-                "Days_Since_Last_Sale": 30,
-                "Expected_Frequency": 0.4,
-            }
-        )
+    def test_operational_blockage_returns_blue_styling(self):
+        result = app.color_diagnostic_flag("OPERATIONAL_BLOCKAGE")
+        assert "background-color: #118ab2;" in result
+        assert "color: #fff;" in result
 
-    def test_returns_value_from_llm(self):
-        with patch("app.get_llm_response", return_value="AI briefing text"):
-            result = app.generate_store_audit_briefing(self._sku(), "OpenAI", "gpt-4o-mini")
-        assert result == "AI briefing text"
+    def test_shrink_risk_returns_red_styling(self):
+        result = app.color_diagnostic_flag("SHRINK_RISK")
+        assert "background-color: #ef476f;" in result
+        assert "color: #fff;" in result
 
-    def test_prompt_contains_sku_id(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "OpenAI", "gpt-4o-mini")
-            prompt = mock_llm.call_args[0][0]
-        assert "SKU042" in prompt
+    def test_normal_returns_grey_styling(self):
+        result = app.color_diagnostic_flag("NORMAL")
+        assert "background-color: #e5e5e5;" in result
+        assert "color: #333;" in result
 
-    def test_prompt_contains_product_name(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "OpenAI", "gpt-4o-mini")
-            prompt = mock_llm.call_args[0][0]
-        assert "Test Widget" in prompt
-
-    def test_prompt_contains_days_since_last_sale(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "OpenAI", "gpt-4o-mini")
-            prompt = mock_llm.call_args[0][0]
-        assert "30" in prompt
-
-    def test_prompt_contains_on_hand_qty(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "OpenAI", "gpt-4o-mini")
-            prompt = mock_llm.call_args[0][0]
-        assert "15" in prompt
-
-    def test_passes_provider_to_llm(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "Groq", "llama-3.3-70b")
-            _, provider, _ = mock_llm.call_args[0]
-        assert provider == "Groq"
-
-    def test_passes_model_to_llm(self):
-        with patch("app.get_llm_response") as mock_llm:
-            mock_llm.return_value = ""
-            app.generate_store_audit_briefing(self._sku(), "Groq", "llama-3.3-70b")
-            _, _, model = mock_llm.call_args[0]
-        assert model == "llama-3.3-70b"
+    def test_unknown_flag_returns_empty_string(self):
+        assert app.color_diagnostic_flag("INVALID") == ""
