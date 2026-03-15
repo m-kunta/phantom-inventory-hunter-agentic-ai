@@ -319,11 +319,6 @@ if not df.empty:
         lambda row: run_triangulation(row, df).flag if row["Is_Phantom"] else "", axis=1
     )
 
-    # Apply Triangulation Engine to get the Diagnostic Flag
-    df_filtered["Diagnostic_Flag"] = df_filtered.apply(
-        lambda row: run_triangulation(row, df).flag if row["Is_Phantom"] else "", axis=1
-    )
-
     # ── Dashboard Metrics ─────────────────────────────────────────────────────
     st.markdown("---")
     col1, col2, col3 = st.columns(3)

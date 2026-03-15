@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Python environment** — the venv lives at `.venv/`. Always use it:
 ```bash
+python3 -m venv .venv   # first time only
 source .venv/bin/activate
 # or call directly:
 .venv/bin/python <script>
@@ -86,6 +87,10 @@ All three steps run inside the Streamlit reactive loop against the filtered Data
 That is the complete change — no modifications to `app.py` needed; it reads `PROVIDER_DEFAULTS` dynamically.
 
 ### Key implementation details
+
+- **Single `Diagnostic_Flag` computation** — `run_triangulation()` is called exactly once per row inside `df_filtered.apply(...)`. Do not add a second `.apply()` block for this column; it doubles triangulation work on every Streamlit rerun with no benefit.
+
+- **`conftest.py` Streamlit mock** — `tests/conftest.py` injects a lightweight Streamlit stub into `sys.modules` before any test file imports `app`. Any new test file that imports `app` relies on this automatically; no per-test setup needed.
 
 - **`@st.cache_data(ttl=60)`** on `load_data()` — any code that writes to the SQLite DB must call `load_data.clear()` afterward and `st.rerun()` to reflect the change in the UI. See the CSV upload and synthetic data generation blocks in `app.py` for the pattern.
 
