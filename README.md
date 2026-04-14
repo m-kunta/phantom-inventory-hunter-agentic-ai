@@ -144,32 +144,118 @@ phantom_inventory/
 ├── app.py                   # Main Streamlit dashboard & AI interface
 ├── llm_providers.py         # Provider factory (Gemini/OpenAI/Anthropic/Groq/Ollama)
 ├── data_gen.py              # Synthetic data engine (SQLite generator)
-├── root_cause_agent.py      # Triangulation engine — Root Cause AI Agent (Logic Complete)
+├── root_cause_agent.py       # Triangulation engine — Root Cause AI Agent
 ├── phantom_inventory.db     # Auto-generated SQLite database (git-ignored)
-├── requirements.txt         # Python dependencies
-├── .env                     # Your secret API keys (git-ignored, never commit!)
-├── .env.example             # Safe template to share with collaborators
-├── .gitignore               # Excludes .env, .venv/, *.db, __pycache__/ etc.
-├── ROOT_CAUSE_AGENT.md      # Feature specification for the diagnostic agent
-├── QUICKSTART.md            # Non-technical setup guide
-└── README.md                # This file
+├── requirements.txt        # Python dependencies
+├── .env                    # Your secret API keys (git-ignored)
+├── .env.example            # Safe template to share with collaborators
+├── .gitignore              # Excludes .env, .venv/, *.db, __pycache__/
+├── ROOT_CAUSE_AGENT.md     # Feature specification for the diagnostic agent
+├── QUICKSTART.md           # Non-technical setup guide
+└── README.md               # This file
+```
+
+### System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Data_Layer ["📦 Data Layer"]
+        CSV[("CSV Upload<br/>or Custom Data")]
+        DB[(SQLite DB<br/>phantom_inventory.db)]
+        DG[data_gen.py<br/>Synthetic Generator]
+    end
+
+    subgraph Core_Logic ["⚙️ Core Logic Layer"]
+        LD[("load_data()<br/>Cached Loader")]
+        GDA["Ghost Detection<br/>Algorithm"]
+        RCA["Root Cause<br/>Triangulation Engine"]
+    end
+
+    subgraph AI_Layer ["🤖 AI Agent Layer"]
+        PROV[("LLM Provider<br/>Factory")]
+        GEM[Gemini]
+        OAI[OpenAI]
+        ANT[Anthropic]
+        GROQ[Groq]
+        OLL[Ollama]
+    end
+
+    subgraph UI_Layer ["🖥️ User Interface"]
+        SIDEBAR[Sidebar<br/>Filters & Config]
+        METRICS[Metrics<br/>Dashboard]
+        TABLE[Risk Table<br/>w/ Expandable Rows]
+        BRIEF[Store Audit<br/>Briefing Panel]
+    end
+
+    CSV -->|Upload| LD
+    DG -->|Generate| DB
+    DB -->|Query| LD
+    LD --> GDA
+    GDA -->|Flagged SKUs| RCA
+    RCA -->|Triangulated<br/>Signals| PROV
+    PROV -->|API Call| GEM
+    PROV -->|API Call| OAI
+    PROV -->|API Call| ANT
+    PROV -->|API Call| GROQ
+    PROV -->|Local Call| OLL
+    GDA -->|Display| TABLE
+    GDA -->|Display| METRICS
+    RCA -->|Display| BRIEF
+    SIDEBAR -->|Filter| LD
+    SIDEBAR -->|Configure| PROV
+
+    style Data_Layer fill:#e1f5fe,stroke:#01579b
+    style Core_Logic fill:#fff3e0,stroke:#e65100
+    style AI_Layer fill:#f3e5f5,stroke:#4a148c
+    style UI_Layer fill:#e8f5e9,stroke:#1b5e20
 ```
 
 ### Data Flow
 
+```mermaid
+sequenceDiagram
+    participant User as Store Manager
+    participant App as Streamlit Dashboard
+    participant DB as SQLite Database
+    participant GDA as Ghost Detection Algorithm
+    participant RCA as Root Cause Agent
+    participant LLM as LLM Provider
+
+    Note over User,DB: Day 1: Data Loading
+    User->>App: Opens dashboard
+    App->>DB: load_data() fetches inventory
+    DB-->>App: Returns 50 SKUs with metadata
+
+    Note over App,GDA: Day 1: Ghost Detection
+    App->>GDA: Apply detection algorithm
+    GDA->>GDA: Compute Days_Since_Last_Sale
+    GDA->>GDA: Calculate Expected_Frequency
+    GDA->>GDA: Flag phantom candidates
+    GDA->>GDA: Assign risk tiers (High/Medium/Low)
+    GDA-->>App: Returns flagged SKUs with risk
+
+    Note over User,App: Day 1: User Exploration
+    User->>App: Filters by category (Health & Beauty)
+    App-->>User: Displays 2 HIGH risk SKUs
+
+    Note over User,LLM: Day 1: AI Investigation
+    User->>App: "Generate Store Audit Briefing"
+    App->>RCA: build_diagnostic_payload(SKU)
+    RCA-->>App: Signal bundle (sister SKU, velocity, shrink)
+    App->>LLM: get_llm_response(prompt, provider)
+    LLM-->>App: Natural language briefing
+    App-->>User: Displays actionable audit brief
 ```
-[data_gen.py] ──► [SQLite DB] ──► [app.py: load_data()]
-                                         │
-                               [Ghost Detection Algorithm]
-                                         │
-                    ┌────────────────────┴──────────────────────┐
-                    │                                            │
-             [Streamlit UI]                     [root_cause_agent.py]
-           (Risk Table + Metrics)               (Triangulation Engine)
-                                                         │
-                                                [llm_providers.py]
-                                              (Diagnostic AI Briefing)
-```
+
+### Component Responsibilities
+
+| Component | File | Responsibility |
+|---|---|---|
+| **Dashboard** | `app.py` | UI, filters, ghost detection loop, audit briefing trigger |
+| **Data Generator** | `data_gen.py` | Synthetic SKU generation with diagnostic signals |
+| **Triangulation Engine** | `root_cause_agent.py` | Classifies root cause type (shelf void / blockage / shrink) |
+| **Provider Factory** | `llm_providers.py` | Unified interface to Gemini, OpenAI, Anthropic, Groq, Ollama |
+| **Database** | `phantom_inventory.db` | Local persistence — 50 SKUs with 8 fields each |
 
 ---
 
